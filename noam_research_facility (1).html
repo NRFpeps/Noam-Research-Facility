@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOAM Research Facility - The Science of Peptides</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#07090e',
+                            card: '#101622',
+                            border: '#1e293b',
+                            cyan: '#00f2fe',
+                            blue: '#4facfe',
+                            purple: '#8a2be2',
+                            magenta: '#e100ff'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #07090e;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .glow-text-cyan { text-shadow: 0 0 12px rgba(0, 242, 254, 0.6); }
+        .glow-text-purple { text-shadow: 0 0 12px rgba(138, 43, 226, 0.6); }
+        
+        .glass-panel {
+            background: rgba(16, 22, 34, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-card {
+            background: linear-gradient(135deg, rgba(18, 26, 41, 0.85) 0%, rgba(10, 15, 24, 0.95) 100%);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 242, 254, 0.12);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(0, 242, 254, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px -10px rgba(0, 242, 254, 0.25);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #e100ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-bg-btn {
+            background: linear-gradient(135deg, #00f2fe 0%, #7f00ff 100%);
+            transition: all 0.3s ease;
+        }
+        .gradient-bg-btn:hover {
+            opacity: 0.92;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #07090e; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f2fe; }
+        
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-grid-pattern flex flex-col justify-between">
+
+    <div class="sticky top-0 z-50 bg-red-950/90 border-b border-red-600/40 backdrop-blur-md px-4 py-2.5 text-xs md:text-sm text-red-200 shadow-xl">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 font-mono text-red-300">
+                <i class="fa-solid fa-triangle-exclamation text-red-400 text-lg animate-pulse"></i>
+                <span><strong class="text-red-100 uppercase tracking-wide">MANDATORY COMPLIANCE NOTICE:</strong> FOR IN VITRO LABORATORY RESEARCH ONLY. NOT FOR HUMAN CONSUMPTION, VETERINARY USE, OR THERAPEUTIC APPLICATION.</span>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" class="text-red-400 hover:text-red-100 p-1 transition" title="Dismiss notice bar">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+        </div>
+    </div>
+
+    <header class="glass-panel sticky top-[41px] z-40 border-b border-brand-border/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Title with Vector Molecular SVG -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="relative w-12 h-12 rounded-xl bg-slate-900 border border-cyan-500/40 p-1.5 flex items-center justify-center group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(0,242,254,0.3)] transition">
+                    <!-- Dynamic Glowing Molecule Vector Logo -->
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00f2fe" />
+                                <stop offset="50%" stop-color="#7f00ff" />
+                                <stop offset="100%" stop-color="#e100ff" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Hexagon Backbone -->
+                        <polygon points="50,15 80,32 80,68 50,85 20,68 20,32" fill="none" stroke="url(#logoGrad)" stroke-width="6" stroke-linejoin="round" />
+                        <!-- Inner Connections & Nodes -->
+                        <line x1="50" y1="15" x2="50" y2="85" stroke="url(#logoGrad)" stroke-width="4" />
+                        <line x1="20" y1="32" x2="80" y2="68" stroke="url(#logoGrad)" stroke-width="4" />
+                        <line x1="20" y1="68" x2="80" y2="32" stroke="url(#logoGrad)" stroke-width="4" />
+                        <!-- Atomic Spheres -->
+                        <circle cx="50" cy="15" r="7" fill="#00f2fe" />
+                        <circle cx="80" cy="32" r="7" fill="#4facfe" />
+                        <circle cx="80" cy="68" r="7" fill="#7f00ff" />
+                        <circle cx="50" cy="85" r="7" fill="#e100ff" />
+                        <circle cx="20" cy="68" r="7" fill="#7f00ff" />
+                        <circle cx="20" cy="32" r="7" fill="#00f2fe" />
+                        <circle cx="50" cy="50" r="9" fill="#ffffff" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-lg md:text-xl font-extrabold tracking-wider text-white block leading-tight font-mono">
+                        NOAM <span class="gradient-text">RESEARCH FACILITY</span>
+                    </span>
+                    <span class="text-[10px] sm:text-xs text-cyan-400 font-mono tracking-widest uppercase block">The Science of Peptides</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <a href="#library" class="hover:text-cyan-400 transition flex items-center gap-2">
+                    <i class="fa-solid fa-vial text-xs text-cyan-400"></i> Peptide Library
+                </a>
+                <a href="#calculator" class="hover:text-cyan-400 transition flex items-center gap-2">
+                    <i class="fa-solid fa-calculator text-xs text-cyan-400"></i> Reconstitution Math
+                </a>
+                <a href="#fundamentals" class="hover:text-cyan-400 transition flex items-center gap-2">
+                    <i class="fa-solid fa-dna text-xs text-cyan-400"></i> Peptide Science
+                </a>
+                <a href="#contact" class="hover:text-cyan-400 transition flex items-center gap-2">
+                    <i class="fa-brands fa-telegram text-xs text-cyan-400"></i> Contact
+                </a>
+            </nav>
+
+            <!-- Telegram Quick Button -->
+            <div class="flex items-center gap-3">
+                <button onclick="openContactModal()" class="gradient-bg-btn text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 shadow-lg cursor-pointer">
+                    <i class="fa-brands fa-telegram text-base"></i>
+                    <span class="hidden sm:inline">Contact Inquiry</span>
+                    <span class="sm:hidden">Contact</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative py-16 lg:py-24 overflow-hidden border-b border-brand-border/40">
+        <div class="absolute inset-0 bg-gradient-to-b from-cyan-950/20 via-transparent to-purple-950/20 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel border border-cyan-500/30 text-xs font-mono text-cyan-300">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                        ADVANCED BIOCHEMICAL REFERENCE HUB
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+                        Precision Molecular Research & <span class="gradient-text">Peptide Science</span>
+                    </h1>
+                    
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl">
+                        NOAM Research Facility provides validated scientific reference data, biochemical mechanisms of action, and reconstitution mathematics for educational and analytical research applications.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a href="#library" class="gradient-bg-btn text-white font-semibold px-6 py-3 rounded-lg text-sm flex items-center gap-2 shadow-lg">
+                            Explore Peptide Database <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                        <a href="#calculator" class="glass-panel hover:bg-slate-800/80 text-cyan-300 border border-cyan-500/40 px-6 py-3 rounded-lg text-sm font-semibold flex items-center gap-2 transition">
+                            <i class="fa-solid fa-calculator"></i> Reconstitution Calculator
+                        </a>
+                    </div>
+
+                    <!-- Metrics -->
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800 font-mono">
+                        <div>
+                            <div class="text-xl sm:text-2xl font-bold text-cyan-400">99%+</div>
+                            <div class="text-xs text-slate-400">HPLC Purity Standard</div>
+                        </div>
+                        <div>
+                            <div class="text-xl sm:text-2xl font-bold text-purple-400">Mass Spec</div>
+                            <div class="text-xs text-slate-400">Sequence Verification</div>
+                        </div>
+                        <div>
+                            <div class="text-xl sm:text-2xl font-bold text-pink-400">In Vitro</div>
+                            <div class="text-xs text-slate-400">Research Focused</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Graphic Card with SVG Vector Display -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative group w-full max-w-md">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur-lg opacity-40 group-hover:opacity-75 transition duration-500"></div>
+                        <div class="relative glass-card rounded-2xl p-6 overflow-hidden border border-cyan-500/30 text-center space-y-6">
+                            
+                            <!-- Large Stylized Molecular Hub Graphic -->
+                            <div class="w-32 h-32 mx-auto relative flex items-center justify-center">
+                                <div class="absolute inset-0 bg-cyan-500/20 rounded-full blur-xl animate-pulse"></div>
+                                <svg viewBox="0 0 100 100" class="w-full h-full relative z-10">
+                                    <polygon points="50,10 85,30 85,70 50,90 15,70 15,30" fill="none" stroke="url(#logoGrad)" stroke-width="4" />
+                                    <circle cx="50" cy="10" r="6" fill="#00f2fe" />
+                                    <circle cx="85" cy="30" r="6" fill="#4facfe" />
+                                    <circle cx="85" cy="70" r="6" fill="#7f00ff" />
+                                    <circle cx="50" cy="90" r="6" fill="#e100ff" />
+                                    <circle cx="15" cy="70" r="6" fill="#7f00ff" />
+                                    <circle cx="15" cy="30" r="6" fill="#00f2fe" />
+                                    <!-- Inner Helix -->
+                                    <path d="M 35,30 Q 50,50 65,30 Q 50,50 35,70 Q 50,50 65,70" fill="none" stroke="#00f2fe" stroke-width="3" />
+                                </svg>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-extrabold text-white font-mono">NOAM RESEARCH FACILITY</h3>
+                                <p class="text-xs text-cyan-400 font-mono tracking-widest mt-1">PEPTIDE ANALYTICAL REFERENCE</p>
+                            </div>
+
+                            <div class="p-3 bg-brand-dark/90 rounded-xl border border-slate-800 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-brands fa-telegram text-2xl text-cyan-400"></i>
+                                    <div class="text-left">
+                                        <div class="text-[10px] text-slate-400 font-mono uppercase">Direct Telegram Channel</div>
+                                        <div class="text-sm font-bold text-white font-mono">@NRF_PEPTIDES</div>
+                                    </div>
+                                </div>
+                                <button onclick="openContactModal()" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 px-3 py-1.5 rounded-md font-mono transition">
+                                    QR Code
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="library" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+                <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest">Biochemical Database</div>
+                <h2 class="text-3xl font-extrabold text-white mt-1">Peptide Scientific Reference Library</h2>
+                <p class="text-slate-400 text-sm mt-1">Detailed chemical parameters, half-life data, and mechanisms for research compounds.</p>
+            </div>
+            
+            <a href="https://t.me/NRF_PEPTIDES" target="_blank" class="glass-panel hover:border-cyan-400/50 px-4 py-2 rounded-lg text-xs font-mono text-cyan-300 flex items-center gap-2 self-start md:self-auto transition">
+                <i class="fa-brands fa-telegram text-cyan-400"></i> Inquiry: @NRF_PEPTIDES
+            </a>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="glass-panel p-4 rounded-xl mb-8 flex flex-col md:flex-row gap-4 justify-between border border-brand-border">
+            <div class="relative flex-1">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
+                <input type="text" id="peptideSearch" oninput="filterPeptides()" placeholder="Search peptide by name, sequence, or mechanism (e.g., BPC-157, GLP-1)..." 
+                       class="w-full pl-10 pr-4 py-2.5 bg-brand-dark/90 border border-slate-700/80 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-400 font-mono placeholder-slate-500">
+            </div>
+            
+            <div class="flex flex-wrap gap-2 text-xs font-medium" id="categoryFilters">
+                <button onclick="setCategoryFilter('all', this)" class="filter-btn active px-3 py-2 rounded-lg bg-cyan-500 text-black font-semibold transition">All Compounds</button>
+                <button onclick="setCategoryFilter('Tissue Repair', this)" class="filter-btn px-3 py-2 rounded-lg glass-panel hover:bg-slate-800 text-slate-300 transition">Tissue Repair</button>
+                <button onclick="setCategoryFilter('Metabolic/GLP-1', this)" class="filter-btn px-3 py-2 rounded-lg glass-panel hover:bg-slate-800 text-slate-300 transition">Metabolic/GLP-1</button>
+                <button onclick="setCategoryFilter('Nootropic/GH', this)" class="filter-btn px-3 py-2 rounded-lg glass-panel hover:bg-slate-800 text-slate-300 transition">Nootropic/GH</button>
+                <button onclick="setCategoryFilter('Cosmetic', this)" class="filter-btn px-3 py-2 rounded-lg glass-panel hover:bg-slate-800 text-slate-300 transition">Cosmetic</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Grid -->
+        <div id="peptideGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Populated via JavaScript -->
+        </div>
+    </section>
+
+    <section id="calculator" class="py-16 bg-brand-card/40 border-y border-brand-border/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <span class="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-mono border border-cyan-500/30 uppercase tracking-widest">Laboratory Tools</span>
+                <h2 class="text-3xl font-extrabold text-white mt-3">Reconstitution & Volumetric Math Calculator</h2>
+                <p class="text-slate-400 text-sm mt-2">Accurately calculate vial concentration (mg/mL), bacteriostatic water dilution ratios, and micro-syringe unit measurements for precise lab research dosing.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto">
+                <!-- Inputs -->
+                <div class="lg:col-span-6 glass-panel p-6 rounded-2xl border border-cyan-500/20 space-y-5">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+                        <i class="fa-solid fa-calculator text-cyan-400"></i> Calculation Parameters
+                    </h3>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-300 mb-1.5">Peptide Vial Mass (mg)</label>
+                        <div class="relative">
+                            <input type="number" id="calcMg" value="5" min="0.1" step="0.5" oninput="calculateDose()" class="w-full bg-brand-dark border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white font-mono focus:border-cyan-400 outline-none">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-mono">mg</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-300 mb-1.5">Bacteriostatic Water Added (BAC Volume)</label>
+                        <div class="relative">
+                            <input type="number" id="calcWater" value="2" min="0.5" step="0.5" oninput="calculateDose()" class="w-full bg-brand-dark border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white font-mono focus:border-cyan-400 outline-none">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-mono">mL</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-300 mb-1.5">Target Research Dose</label>
+                        <div class="grid grid-cols-3 gap-2 mb-2">
+                            <input type="number" id="calcTargetDose" value="250" min="1" step="25" oninput="calculateDose()" class="col-span-2 bg-brand-dark border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white font-mono focus:border-cyan-400 outline-none">
+                            <select id="calcDoseUnit" onchange="calculateDose()" class="bg-brand-dark border border-slate-700 rounded-lg px-2 py-2.5 text-xs text-white font-mono focus:border-cyan-400 outline-none">
+                                <option value="mcg" selected>mcg (µg)</option>
+                                <option value="mg">mg</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-300 mb-1.5">Insulin Syringe Capacity</label>
+                        <select id="calcSyringe" onchange="calculateDose()" class="w-full bg-brand-dark border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white font-mono focus:border-cyan-400 outline-none">
+                            <option value="100">U-100 Syringe (1.0 mL = 100 Units)</option>
+                            <option value="50">U-50 Syringe (0.5 mL = 50 Units)</option>
+                            <option value="30">U-30 Syringe (0.3 mL = 30 Units)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Outputs -->
+                <div class="lg:col-span-6 glass-panel p-6 rounded-2xl border border-purple-500/30 flex flex-col justify-between space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-white flex items-center justify-between border-b border-slate-800 pb-3">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-square-poll-vertical text-purple-400"></i> Measurement Output</span>
+                            <span class="text-xs font-mono text-purple-300 bg-purple-950/60 border border-purple-800 px-2 py-0.5 rounded">Precision Math</span>
+                        </h3>
+
+                        <div class="mt-6 space-y-4 font-mono">
+                            <div class="bg-brand-dark/80 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                                <div>
+                                    <div class="text-xs text-slate-400">Concentration</div>
+                                    <div class="text-lg font-bold text-cyan-400" id="resConcentration">2.50 mg/mL</div>
+                                </div>
+                                <i class="fa-solid fa-flask text-slate-600 text-xl"></i>
+                            </div>
+
+                            <div class="bg-brand-dark/80 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                                <div>
+                                    <div class="text-xs text-slate-400">Target Dose Volume</div>
+                                    <div class="text-lg font-bold text-purple-400" id="resVolume">0.10 mL</div>
+                                </div>
+                                <i class="fa-solid fa-droplet text-slate-600 text-xl"></i>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-cyan-950/50 to-purple-950/50 p-5 rounded-xl border border-cyan-500/40 text-center">
+                                <div class="text-xs text-cyan-300 font-sans font-medium uppercase tracking-wider">Syringe Measurement Mark</div>
+                                <div class="text-3xl sm:text-4xl font-extrabold text-white my-1" id="resUnits">10.0 UNITS</div>
+                                <div class="text-xs text-slate-400" id="resSyringeLabel">On a standard U-100 insulin syringe</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-red-950/30 border border-red-800/40 rounded-lg text-xs text-red-300">
+                        <i class="fa-solid fa-circle-info mr-1"></i> For laboratory reference calculations only. Maintain sterile reconstitution procedures.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="fundamentals" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest">Biochemical Fundamentals</span>
+            <h2 class="text-3xl font-extrabold text-white mt-2">Peptide Synthesis & Molecular Structure</h2>
+            <p class="text-slate-400 text-sm mt-1">Understanding amino acid linkages, solid-phase peptide synthesis (SPPS), and secondary folding.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl mb-4">
+                    <i class="fa-solid fa-dna"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Amino Acid Chains</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Peptides consist of short chains of 2 to 50 amino acids linked by amide/peptide bonds formed between carboxylic and amino groups.
+                </p>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl mb-4">
+                    <i class="fa-solid fa-gears"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">SPPS Synthesis</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Solid-Phase Peptide Synthesis allows stepwise assembly of peptide chains attached to an insoluble polymeric resin support, ensuring high yield and purity control.
+                </p>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 text-xl mb-4">
+                    <i class="fa-solid fa-temperature-arrow-down"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Lyophilization & Storage</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Lyophilized (freeze-dried) powder maintains molecular stability at -20°C for extended periods. Reconstituted solutions require 2-8°C refrigeration.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-16 bg-brand-card/30 border-t border-brand-border/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <span class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-mono border border-purple-500/30 uppercase tracking-widest">Inquiries & Contact</span>
+                    <h2 class="text-3xl font-extrabold text-white">Direct Research Communication</h2>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Connect with NOAM Research Facility directly on Telegram for research reference inquiries, analytical document verification, or educational discussions regarding lab protocols.
+                    </p>
+
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="p-3 bg-brand-dark rounded-lg border border-slate-800 flex items-center gap-3">
+                            <i class="fa-brands fa-telegram text-cyan-400 text-lg"></i>
+                            <div>
+                                <strong class="text-white">Telegram Handle:</strong> @NRF_PEPTIDES
+                            </div>
+                        </div>
+                        <div class="p-3 bg-brand-dark rounded-lg border border-slate-800 flex items-center gap-3">
+                            <i class="fa-solid fa-microscope text-purple-400 text-lg"></i>
+                            <div>
+                                <strong class="text-white">Data Verification:</strong> HPLC & Mass Spec COA Records
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pure Vector Vectorized QR Code Card -->
+                <div class="glass-panel p-8 rounded-2xl border border-cyan-500/30 text-center relative">
+                    <div class="absolute -top-3 right-6 px-3 py-1 bg-cyan-500 text-black text-[10px] font-bold uppercase rounded-full tracking-wider font-mono">
+                        Official Contact
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">Scan Telegram QR Code</h3>
+                    <p class="text-slate-400 text-xs mb-6 max-w-sm mx-auto">
+                        Scan with your mobile camera or click below to open the official Telegram communication channel.
+                    </p>
+
+                    <!-- Vector Generated QR Code Frame -->
+                    <a href="https://t.me/NRF_PEPTIDES" target="_blank" class="inline-block bg-white p-4 rounded-2xl shadow-2xl hover:scale-105 transition transform border-2 border-cyan-400">
+                        <div class="w-48 h-48 relative flex items-center justify-center">
+                            <!-- High Precision Clean SVG QR Code Structure -->
+                            <svg viewBox="0 0 200 200" class="w-full h-full">
+                                <!-- Background -->
+                                <rect width="200" height="200" fill="#ffffff" />
+                                
+                                <!-- QR Outer Corners -->
+                                <rect x="15" y="15" width="50" height="50" fill="#00f2fe" rx="8" />
+                                <rect x="23" y="23" width="34" height="34" fill="#ffffff" rx="4" />
+                                <rect x="31" y="31" width="18" height="18" fill="#7f00ff" rx="2" />
+
+                                <rect x="135" y="15" width="50" height="50" fill="#00f2fe" rx="8" />
+                                <rect x="143" y="23" width="34" height="34" fill="#ffffff" rx="4" />
+                                <rect x="151" y="31" width="18" height="18" fill="#7f00ff" rx="2" />
+
+                                <rect x="15" y="135" width="50" height="50" fill="#00f2fe" rx="8" />
+                                <rect x="23" y="143" width="34" height="34" fill="#ffffff" rx="4" />
+                                <rect x="31" y="151" width="18" height="18" fill="#7f00ff" rx="2" />
+
+                                <!-- Pattern Matrix Dots -->
+                                <path d="M 75 20 H 120 V 30 H 75 Z M 75 40 H 95 V 50 H 75 Z M 105 40 H 120 V 60 H 105 Z 
+                                         M 20 75 H 40 V 90 H 20 Z M 50 75 H 80 V 85 H 50 Z M 90 75 H 120 V 95 H 90 Z 
+                                         M 130 75 H 180 V 85 H 130 Z M 30 100 H 60 V 120 H 30 Z M 70 100 H 100 V 110 H 70 Z 
+                                         M 110 100 H 140 V 120 H 110 Z M 150 95 H 180 V 110 H 150 Z 
+                                         M 75 135 H 95 V 155 H 75 Z M 105 135 H 130 V 145 H 105 Z M 140 125 H 180 V 135 H 140 Z 
+                                         M 80 165 H 110 V 180 H 80 Z M 120 155 H 150 V 180 H 120 Z M 160 150 H 180 V 180 H 160 Z" fill="#334155" />
+
+                                <!-- Center Telegram Badge -->
+                                <circle cx="100" cy="100" r="22" fill="#00f2fe" />
+                                <circle cx="100" cy="100" r="19" fill="#7f00ff" />
+                                <!-- Telegram Paper Plane Icon -->
+                                <path d="M 90 100 L 112 90 L 104 110 L 98 103 L 95 107 Z" fill="#ffffff" />
+                            </svg>
+                        </div>
+                    </a>
+
+                    <div class="text-cyan-400 font-mono font-bold text-base mt-4 mb-3">
+                        @NRF_PEPTIDES
+                    </div>
+
+                    <a href="https://t.me/NRF_PEPTIDES" target="_blank" class="gradient-bg-btn text-white px-6 py-2.5 rounded-lg text-xs font-bold inline-flex items-center gap-2">
+                        <i class="fa-brands fa-telegram text-base"></i> Open Telegram Channel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="detailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl rounded-2xl border border-cyan-500/40 p-6 relative animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div id="modalContent">
+                <!-- JavaScript populated content -->
+            </div>
+        </div>
+    </div>
+
+    <div id="contactModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-2xl border border-cyan-500/40 p-6 relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeContactModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-cyan-500/20 border border-cyan-400/40 mx-auto flex items-center justify-center text-cyan-400 text-xl mb-3">
+                    <i class="fa-brands fa-telegram"></i>
+                </div>
+                
+                <h3 class="text-xl font-extrabold text-white">Contact NOAM Research</h3>
+                <p class="text-slate-400 text-xs mt-1 font-mono">Telegram: @NRF_PEPTIDES</p>
+
+                <!-- Vector SVG QR in Modal -->
+                <a href="https://t.me/NRF_PEPTIDES" target="_blank" class="my-6 p-3 bg-white rounded-xl shadow-2xl inline-block border border-cyan-300">
+                    <div class="w-48 h-48">
+                        <svg viewBox="0 0 200 200" class="w-full h-full">
+                            <rect width="200" height="200" fill="#ffffff" />
+                            <rect x="15" y="15" width="50" height="50" fill="#00f2fe" rx="8" />
+                            <rect x="23" y="23" width="34" height="34" fill="#ffffff" rx="4" />
+                            <rect x="31" y="31" width="18" height="18" fill="#7f00ff" rx="2" />
+                            <rect x="135" y="15" width="50" height="50" fill="#00f2fe" rx="8" />
+                            <rect x="143" y="23" width="34" height="34" fill="#ffffff" rx="4" />
+                            <rect x="151" y="31" width="18" height="18" fill="#7f00ff" rx="2" />
+                            <rect x="15" y="135" width="50" height="50" fill="#00f2fe" rx="8" />
+                            <rect x="23" y="143" width="34" height="34" fill="#ffffff" rx="4" />
+                            <rect x="31" y="151" width="18" height="18" fill="#7f00ff" rx="2" />
+                            <path d="M 75 20 H 120 V 30 H 75 Z M 75 40 H 95 V 50 H 75 Z M 105 40 H 120 V 60 H 105 Z M 20 75 H 40 V 90 H 20 Z M 50 75 H 80 V 85 H 50 Z M 90 75 H 120 V 95 H 90 Z M 130 75 H 180 V 85 H 130 Z M 30 100 H 60 V 120 H 30 Z M 70 100 H 100 V 110 H 70 Z M 110 100 H 140 V 120 H 110 Z M 150 95 H 180 V 110 H 150 Z M 75 135 H 95 V 155 H 75 Z M 105 135 H 130 V 145 H 105 Z M 140 125 H 180 V 135 H 140 Z M 80 165 H 110 V 180 H 80 Z M 120 155 H 150 V 180 H 120 Z M 160 150 H 180 V 180 H 160 Z" fill="#334155" />
+                            <circle cx="100" cy="100" r="22" fill="#00f2fe" />
+                            <circle cx="100" cy="100" r="19" fill="#7f00ff" />
+                            <path d="M 90 100 L 112 90 L 104 110 L 98 103 L 95 107 Z" fill="#ffffff" />
+                        </svg>
+                    </div>
+                </a>
+
+                <p class="text-[11px] text-slate-400 leading-relaxed mb-5">
+                    Click above or scan to message directly on Telegram regarding reference documentation or research specs.
+                </p>
+
+                <a href="https://t.me/NRF_PEPTIDES" target="_blank" class="w-full gradient-bg-btn text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg">
+                    <i class="fa-brands fa-telegram text-lg"></i> Open @NRF_PEPTIDES
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-brand-dark border-t border-brand-border text-slate-400 text-xs py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-900 border border-cyan-500/40 p-1 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <polygon points="50,15 80,32 80,68 50,85 20,68 20,32" fill="none" stroke="url(#logoGrad)" stroke-width="8" />
+                            <circle cx="50" cy="50" r="12" fill="#00f2fe" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-extrabold text-white font-mono text-sm">NOAM RESEARCH FACILITY</div>
+                        <div class="text-cyan-400 text-[10px] font-mono tracking-widest uppercase">The Science of Peptides</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6 font-mono">
+                    <a href="#library" class="hover:text-cyan-400">Library</a>
+                    <a href="#calculator" class="hover:text-cyan-400">Calculator</a>
+                    <a href="#fundamentals" class="hover:text-cyan-400">Science</a>
+                    <a href="javascript:openContactModal()" class="text-cyan-400 hover:underline">@NRF_PEPTIDES</a>
+                </div>
+            </div>
+
+            <!-- Mandatory Disclaimer Box Footer -->
+            <div class="p-4 bg-red-950/20 border border-red-900/40 rounded-xl text-slate-300 space-y-2 text-[11px] leading-relaxed">
+                <div class="font-bold text-red-400 font-mono flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-sm"></i> RESEARCH USE ONLY LEGAL DISCLAIMER
+                </div>
+                <p>
+                    FOR IN VITRO LABORATORY RESEARCH ONLY. NOT FOR HUMAN CONSUMPTION, VETERINARY USE, OR THERAPEUTIC APPLICATION. All compounds and informational content provided on this platform are intended strictly for scientific analysis, in vitro experimentation, and educational reference.
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-800 text-[11px] text-slate-500 font-mono">
+                <div>© 2026 NOAM Research Facility. All Rights Reserved.</div>
+                <div class="mt-2 sm:mt-0">Telegram Official: @NRF_PEPTIDES</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Peptide Database Array
+        const PEPTIDE_DATABASE = [
+            {
+                id: 'bpc-157',
+                name: 'BPC-157',
+                category: 'Tissue Repair',
+                sequence: 'Gly-Glu-Pro-Pro-Pro-Gly-Lys-Pro-Ala-Asp-Asp-Ala-Gly-Leu-Val',
+                mw: '1419.53 g/mol',
+                halfLife: '~4 Hours (In Vitro)',
+                description: 'Pentadecapeptide derived from human gastric juice protein. Researched for tendon-to-bone healing, angiogenesis upregulation, and cell survival under ischemia.',
+                mechanism: 'Stimulates VEGFR2 expression, increases collagen synthesis, and activates the FAK-paxillin pathway for cell migration.',
+                notes: 'Extensively studied in vitro for soft tissue cell proliferation.'
+            },
+            {
+                id: 'tb-500',
+                name: 'TB-500 (Thymosin Beta-4)',
+                category: 'Tissue Repair',
+                sequence: 'Ac-LKKTETQ',
+                mw: '889.01 g/mol',
+                halfLife: '~24-36 Hours',
+                description: 'Active fragment of Thymosin Beta-4. Regulates actin polymerization and cell migration in endothelial and muscular cell cultures.',
+                mechanism: 'Binds to G-actin monomer to prevent polymerization and promote cell motility in damaged micro-vascular beds.',
+                notes: 'Focuses on actin sequestering mechanisms.'
+            },
+            {
+                id: 'ghk-cu',
+                name: 'GHK-Cu (Copper Tripeptide)',
+                category: 'Cosmetic',
+                sequence: 'Gly-His-Lys · Cu2+',
+                mw: '404.93 g/mol',
+                halfLife: '~1 Hour',
+                description: 'Copper-binding tripeptide involved in skin matrix synthesis, metalloproteinase balancing, and DNA damage response regulation.',
+                mechanism: 'Upregulates collagen types I & III, elastin synthesis, and antioxidant superoxide dismutase activity.',
+                notes: 'Popular model for dermal matrix gene modulation.'
+            },
+            {
+                id: 'tirzepatide',
+                name: 'Tirzepatide',
+                category: 'Metabolic/GLP-1',
+                sequence: '39-amino acid linear sequence with C20 fatty diacid attachment',
+                mw: '4813.52 g/mol',
+                halfLife: '~5 Days',
+                description: 'Dual GIP and GLP-1 receptor agonist engineered for metabolic signaling research and glucose regulation modeling.',
+                mechanism: 'Synergistically activates GIP and GLP-1 receptors to stimulate glucose-dependent insulin secretion and central satiety pathways.',
+                notes: 'Dual incretin receptor pathway research standard.'
+            },
+            {
+                id: 'semaglutide',
+                name: 'Semaglutide',
+                category: 'Metabolic/GLP-1',
+                sequence: '31-amino acid peptide with hydrophobic side chain',
+                mw: '4113.58 g/mol',
+                halfLife: '~7 Days',
+                description: 'GLP-1 receptor agonist with high albumin-binding affinity due to fatty acid chain modification.',
+                mechanism: 'Selectively binds GLP-1 receptors, suppressing glucagon secretion and delaying gastric motility in in-vitro tissue assays.',
+                notes: 'Long half-life incretin model.'
+            },
+            {
+                id: 'retatrutide',
+                name: 'Retatrutide',
+                category: 'Metabolic/GLP-1',
+                sequence: '39-amino acid synthetic multi-agonist',
+                mw: '4731.33 g/mol',
+                halfLife: '~6 Days',
+                description: 'Triple agonist peptide targeting GIP, GLP-1, and Glucagon (GCG) receptors simultaneously.',
+                mechanism: 'Co-activates GIP, GLP-1, and Glucagon receptors to elevate intracellular cAMP and metabolic energy turnover.',
+                notes: 'Next-generation multi-receptor compound.'
+            },
+            {
+                id: 'cjc-ipamorelin',
+                name: 'CJC-1295 / Ipamorelin',
+                category: 'Nootropic/GH',
+                sequence: 'CJC-1295 (Tetrasubstituted 29-amino acid) + Ipamorelin (Pentapeptide)',
+                mw: '3367.9 / 711.86 g/mol',
+                halfLife: 'CJC (~30 min), Ipamorelin (~2 hours)',
+                description: 'Combined secretagogue model pairing a long-acting GHRH analogue with a selective ghrelin/GHRP receptor agonist.',
+                mechanism: 'Synergistically stimulates somatotroph pituitary cells to produce pulsatile Growth Hormone release without raising cortisol.',
+                notes: 'Gold standard pituitary pathway model.'
+            },
+            {
+                id: 'melanotan-2',
+                name: 'Melanotan II',
+                category: 'Cosmetic',
+                sequence: 'Ac-Nle-cyclo[Asp-His-D-Phe-Arg-Trp-Lys]-NH2',
+                mw: '1024.18 g/mol',
+                halfLife: '~1-2 Hours',
+                description: 'Cyclic heptapeptide analogue of alpha-melanocyte-stimulating hormone (α-MSH).',
+                mechanism: 'Activates melanocortin receptors (MC1R, MC4R) to trigger melanogenesis in melanocyte cultures.',
+                notes: 'Synthetic melanocortin signaling compound.'
+            }
+        ];
+
+        let currentCategory = 'all';
+
+        // Render Database Grid
+        function renderPeptides(list) {
+            const container = document.getElementById('peptideGrid');
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 glass-panel rounded-2xl">
+                        <i class="fa-solid fa-flask-vial text-4xl text-slate-600 mb-3"></i>
+                        <p class="text-slate-400 font-mono text-sm">No matching compounds found in research library.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map(item => `
+                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border border-brand-border">
+                    <div>
+                        <div class="flex items-start justify-between gap-2 mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-cyan-950/80 text-cyan-400 text-[11px] font-mono border border-cyan-800/60 font-semibold">
+                                ${item.category}
+                            </span>
+                            <span class="text-slate-500 text-[11px] font-mono">
+                                <i class="fa-solid fa-clock mr-1"></i>${item.halfLife}
+                            </span>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white mb-2 font-sans">${item.name}</h3>
+                        <p class="text-slate-300 text-xs leading-relaxed mb-4 line-clamp-3">${item.description}</p>
+
+                        <div class="space-y-2 mb-4 font-mono text-[11px]">
+                            <div class="bg-brand-dark/90 p-2.5 rounded-lg border border-slate-800">
+                                <span class="text-slate-400 block text-[10px] uppercase">Sequence / Structure:</span>
+                                <span class="text-cyan-300 font-mono truncate block">${item.sequence}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+                            <span class="text-[11px] font-mono text-slate-400">MW: <strong class="text-purple-300">${item.mw}</strong></span>
+                            <button onclick="openDetailModal('${item.id}')" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 px-3 py-1.5 rounded-lg font-mono transition">
+                                View Specs <i class="fa-solid fa-expand text-[10px] ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Logic
+        function filterPeptides() {
+            const query = document.getElementById('peptideSearch').value.toLowerCase();
+            const filtered = PEPTIDE_DATABASE.filter(item => {
+                const matchesCategory = currentCategory === 'all' || item.category === currentCategory;
+                const matchesSearch = item.name.toLowerCase().includes(query) ||
+                                      item.sequence.toLowerCase().includes(query) ||
+                                      item.mechanism.toLowerCase().includes(query);
+                return matchesCategory && matchesSearch;
+            });
+            renderPeptides(filtered);
+        }
+
+        function setCategoryFilter(category, btn) {
+            currentCategory = category;
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('bg-cyan-500', 'text-black', 'font-semibold');
+                b.classList.add('glass-panel', 'text-slate-300');
+            });
+            btn.classList.remove('glass-panel', 'text-slate-300');
+            btn.classList.add('bg-cyan-500', 'text-black', 'font-semibold');
+            filterPeptides();
+        }
+
+        // Reconstitution Math Logic
+        function calculateDose() {
+            const mg = parseFloat(document.getElementById('calcMg').value) || 0;
+            const water = parseFloat(document.getElementById('calcWater').value) || 0;
+            let targetDose = parseFloat(document.getElementById('calcTargetDose').value) || 0;
+            const unitType = document.getElementById('calcDoseUnit').value;
+            const syringeType = parseFloat(document.getElementById('calcSyringe').value) || 100;
+
+            if (mg <= 0 || water <= 0 || targetDose <= 0) {
+                document.getElementById('resConcentration').innerText = '0.00 mg/mL';
+                document.getElementById('resVolume').innerText = '0.00 mL';
+                document.getElementById('resUnits').innerText = '0.0 UNITS';
+                return;
+            }
+
+            const targetDoseMg = unitType === 'mcg' ? targetDose / 1000 : targetDose;
+            const concentrationMgPerMl = mg / water;
+            const doseVolumeMl = targetDoseMg / concentrationMgPerMl;
+            const syringeUnits = doseVolumeMl * syringeType;
+
+            document.getElementById('resConcentration').innerText = `${concentrationMgPerMl.toFixed(2)} mg/mL`;
+            document.getElementById('resVolume').innerText = `${doseVolumeMl.toFixed(3)} mL`;
+            document.getElementById('resUnits').innerText = `${syringeUnits.toFixed(1)} UNITS`;
+            document.getElementById('resSyringeLabel').innerText = `On a U-${syringeType} syringe (${(syringeType/100).toFixed(1)} mL capacity)`;
+        }
+
+        // Modal Views
+        function openDetailModal(id) {
+            const item = PEPTIDE_DATABASE.find(p => p.id === id);
+            if (!item) return;
+
+            document.getElementById('modalContent').innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="px-2.5 py-1 rounded bg-cyan-950 text-cyan-400 font-mono text-xs border border-cyan-800">${item.category}</span>
+                        <span class="text-xs font-mono text-slate-400">MW: ${item.mw}</span>
+                    </div>
+
+                    <h2 class="text-2xl font-extrabold text-white">${item.name}</h2>
+
+                    <div class="bg-brand-dark p-3.5 rounded-xl border border-slate-800 space-y-1 font-mono text-xs">
+                        <span class="text-slate-400 uppercase text-[10px]">Amino Acid Sequence / Structure:</span>
+                        <div class="text-cyan-300 font-bold break-all">${item.sequence}</div>
+                    </div>
+
+                    <div class="space-y-3 text-xs leading-relaxed">
+                        <div>
+                            <h4 class="font-bold text-white mb-1">Description:</h4>
+                            <p class="text-slate-300">${item.description}</p>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-white mb-1">Biochemical Mechanism:</h4>
+                            <p class="text-slate-300">${item.mechanism}</p>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-white mb-1">Research & Stability Notes:</h4>
+                            <p class="text-slate-300">${item.notes}</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800 flex justify-between items-center">
+                        <span class="text-xs text-slate-400 font-mono">Half-Life: ${item.halfLife}</span>
+                        <button onclick="openContactModal()" class="gradient-bg-btn text-white px-4 py-2 rounded-lg text-xs font-bold">
+                            Inquire Specs on Telegram
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function openContactModal() {
+            document.getElementById('contactModal').classList.remove('hidden');
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').classList.add('hidden');
+        }
+
+        // Initialize App
+        window.onload = function() {
+            renderPeptides(PEPTIDE_DATABASE);
+            calculateDose();
+        };
+    </script>
+</body>
+</html>
